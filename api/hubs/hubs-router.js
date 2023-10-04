@@ -1,5 +1,5 @@
 const express = require('express');
-
+const { checkHubId } = require('./hub-middleware')
 const Hubs = require('./hubs-model.js');
 const Messages = require('../messages/messages-model.js');
 
@@ -8,12 +8,12 @@ const router = express.Router();
 router.get('/', (req, res, next) => {
   Hubs.find(req.query)
     .then(hubs => {
-      res.status(200).json(hubs);
+      res.status(200).json(hubs); 
     })
     .catch(next);
 });
 
-router.get('/:id', (req, res, next) => {
+router.get('/:id', checkHubId, (req, res, next) => {
   Hubs.findById(req.params.id)
     .then(hub => {
       if (hub) {
